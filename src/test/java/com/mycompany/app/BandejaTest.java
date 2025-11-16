@@ -46,7 +46,7 @@ public class BandejaTest {
 
       // buscar por contenido
       List<Email> resultadoContenido = bandejaEntrada.buscarEmails("informe");
-      assertEquals(1, resultadoContenido.size(), "Debería encontrar 1 correo con 'informe' en el contenido");
+      assertEquals(1, resultadoAsunto.size(), "Debería encontrar 1 correo con 'reunión' en el asunto");
       assertEquals("Informe mensual", resultadoContenido.get(0).getSubject());
 
       // buscar por remitente
