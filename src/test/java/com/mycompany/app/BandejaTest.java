@@ -1,7 +1,8 @@
 package com.mycompany.app;
 
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -65,27 +66,27 @@ public class BandejaTest {
       Usuario martuUser = new Usuario("Martu", "martu@empresa.com");
 
       // Crear el correo
-      Email email = new Email(
+      Email emailVierne = new Email(
           "Ya es Viernes",
           "Hoy es viernes de cerveza.",
           r1);
 
       // Agregar destinatarios
-      email.getRecipients().add(martu);
+      emailVierne.getRecipients().add(martu);
 
       //clase que envía
       SendMail gestor = new SendMail();
 
       //enviar
-      gestor.enviar(email, Arrays.asList(martu));
+      gestor.enviar(emailVierne, Arrays.asList(martu));
 
-      // verificar status sent y que se guardo en bandeja de salida
-      assertEquals("Sent", gestor.getStatus(), "El estado del correo debería ser 'Sent'");
-      assertEquals(1, r1.getBandejaSalida().getEmails().size(),
-          "El remitente debería tener un correo en su bandeja de salida");
+      assertEquals(1, martu.getBandejaEntrada().getEmails().size(), "Martu debería tener un correo en su bandeja de entrada");
 
-      martuUser.eliminarEmail(email);
-      assertTrue(martuUser.getBandejaEntrada().getEmails().get(0).isEliminado());
+      martuUser.eliminarEmail(emailVierne);
+      assertTrue(emailVierne.isEliminado());
+
+      assertFalse(martu.getBandejaEntrada().getEmails().contains(emailVierne));
+      //assertTrue(martuUser.getContacto().getBandejaEntrada().getEmails().get(0).isEliminado());
 
     }
 

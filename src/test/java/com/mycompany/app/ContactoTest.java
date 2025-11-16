@@ -1,11 +1,14 @@
 package com.mycompany.app;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class ContactoTest {
-
+    
     private Contacto contacto;
     
     @BeforeEach
@@ -113,9 +116,5 @@ public class ContactoTest {
         assertEquals(nombre, destinatario.getNombre());
         assertEquals(email, destinatario.getEmail());
         assertTrue(destinatario.getEmail().contains("@"));
-    }
-
-    private void assertNull(String email, String el_email_debería_estar_en_null_tras_elimi) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
