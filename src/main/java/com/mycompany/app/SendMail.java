@@ -2,7 +2,7 @@ package com.mycompany.app;
 
 import java.util.List;
 
-public class SendMail {
+public class SendMail implements ISend {
     private String status = "Pending";
 
     public String getStatus() {

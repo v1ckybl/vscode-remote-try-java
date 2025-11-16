@@ -2,7 +2,7 @@ package com.mycompany.app;
 
 import java.util.List;
 
-public class Usuario {
+public class Usuario implements IMarcador {
     private String nombre;
     private String email;
     public boolean leido = false;

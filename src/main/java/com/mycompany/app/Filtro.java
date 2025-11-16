@@ -1,6 +1,7 @@
 package com.mycompany.app;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Filtro {
 

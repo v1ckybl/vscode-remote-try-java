@@ -3,7 +3,7 @@ package com.mycompany.app;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Email {
+public class Email implements IMarcador {
     private String subject;
     private String content;
     private Contacto sender;
