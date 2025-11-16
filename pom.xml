@@ -28,7 +28,7 @@
 
   <build>
     <plugins>
-      <!-- Plugin de compilación -->
+      <!-- Plugin de compilaciÃ³n -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
