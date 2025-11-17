@@ -1,20 +1,16 @@
 package com.mycompany.app;
 
-import java.util.List;
 
 public class Usuario implements IMarcador {
     private String nombre;
     private String email;
-    public boolean leido = false;
-    private boolean eliminado = false;//por defecto falso
-    private List<Email> emails;
     private Contacto contacto; // Relación Usuario -> Contacto
+    private boolean leido;
 
-    public Usuario(String nombre, String email) {
+    public Usuario(String nombre, String email, Contacto contacto) {
         this.nombre = nombre;
         this.email = email;
-        this.contacto = new Contacto(nombre, email); // Crear contacto asociado
-        this.leido = false;
+        this.contacto = contacto;
     }
 
     public String getNombre() {
@@ -67,7 +63,5 @@ public class Usuario implements IMarcador {
         email.restaurar(); // Usar método existente en Email
     }
 
-    public boolean isEliminado() {
-      return eliminado;
-    }
+    
 }
