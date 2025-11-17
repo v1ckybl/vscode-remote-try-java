@@ -8,7 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class UsuarioTest {
-    @Test
+
+  @Test
   public void crearUsuario() {
     //debe crear un usuario con nombre y email
     String nombre = "Juan Perez";

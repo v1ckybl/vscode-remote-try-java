@@ -13,6 +13,11 @@ public class Usuario implements IMarcador {
         this.contacto = contacto;
     }
 
+    public Usuario(String nombre2, String email2) {
+      this.nombre = nombre2;
+      this.email = email2;
+    }
+
     public String getNombre() {
         return nombre;
     }
