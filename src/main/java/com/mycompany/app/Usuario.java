@@ -51,12 +51,13 @@ public class Usuario implements IMarcador {
 
     // Usuario puede eliminar emails de su contacto asociado
     public void eliminarEmail(Email email) {
-        email.eliminado = true; // Marcar como eliminado
-        // Opcional: remover físicamente de las bandejas
-        if (contacto != null) {
-            contacto.getBandejaEntrada().getEmails().removeIf(e -> e.eliminado);
-        }
+    email.eliminado = true; // Marcar como eliminado (Bandera en el Email)
+    
+    if (contacto != null) {
+        //usa el método de Bandeja para removerlo de la lista interna
+        contacto.getBandejaEntrada().removerEmail(email); 
     }
+}
 
     // Usuario puede restaurar emails
     public void restaurarEmail(Email email) {

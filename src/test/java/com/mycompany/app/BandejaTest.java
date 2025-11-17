@@ -80,17 +80,18 @@ public class BandejaTest {
       //enviar
       gestor.enviar(emailVierne, Arrays.asList(martu));
 
+      //email clonado en la bandeja de martu
       Email emailDeMartu = martu.getBandejaEntrada().getEmails().get(0);
       
-      //Verificar que el email llegó
+      //verificar que el email llegó
       assertEquals(1, martu.getBandejaEntrada().getEmails().size(),"Martu debería tener un correo en su bandeja de entrada");
       assertTrue(martu.getBandejaEntrada().getEmails().contains(emailDeMartu));
       
-      // Eliminar usando el usuario
+      //eliminar usando el usuario
       martuUser.eliminarEmail(emailDeMartu);
       assertTrue(emailDeMartu.isEliminado());
       
-      // Verificar que ya no está en la bandeja
+      //verificar que ya no está en la bandeja
       assertFalse(martu.getBandejaEntrada().getEmails().contains(emailDeMartu));
     }
     
