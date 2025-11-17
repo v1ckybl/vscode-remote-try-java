@@ -174,4 +174,50 @@ public class EmailTest {
     assertTrue(emailAna.isLeido(), "El correo de Ana debería estar marcado como leído");
     assertFalse(emailLuis.isLeido(), "El correo de Luis no debería afectarse, sigue sin leer");
     }
+
+    //NO SE TOCAAAA ESTE TEST PERFE
+  @Test
+   public void testLeerContenido() {
+   Contacto remitente = new Contacto("Carlos", "carlos@empresa.com");
+   Contacto meli = new Contacto("Meli", "meli@empresa.com");
+   Contacto marto = new Contacto("Luis", "luis@empresa.com");
+
+   //Usuario meliUser = new Usuario("Meli", "meli@empresa.com", meli);
+   Usuario martoUser = new Usuario("Luis", "luis@empresa.com", marto);
+
+   //enviar el correo
+   Email reunion = new Email("Reunión importante",
+                            "Mañana a las 10am", remitente);
+   
+   reunion.getRecipients().add(meli);
+   reunion.getRecipients().add(marto);
+
+   SendMail gestor = new SendMail();
+   gestor.enviar(reunion, Arrays.asList(meli, marto));
+
+   assertTrue(remitente.getBandejaSalida().getEmails().contains(reunion));
+
+   //correos clonados en bandejas de cada contacto
+   Email emailMeli = meli.getBandejaEntrada().getEmails().get(0);
+   Email emailMarto = marto.getBandejaEntrada().getEmails().get(0);
+
+   assertNotSame(emailMeli, emailMarto);
+   
+   //verif bandeja de entrada de cada uno
+   assertEquals(1, meli.getBandejaEntrada().getEmails().size());
+   assertEquals(1, marto.getBandejaEntrada().getEmails().size());
+   
+   //verifico no leido
+   assertFalse(emailMeli.isLeido());
+   assertFalse(emailMarto.isLeido());
+  
+   //marto abre su correo
+   martoUser.getContacto().getBandejaEntrada().getEmails().get(0).getContent();
+   assertTrue(marto.getBandejaEntrada().getEmails().get(0).isLeido());
+  
+   //meli abre el correo
+   meli.getBandejaEntrada().getEmails().get(0).getContent();
+   assertTrue(emailMeli.isLeido(), "Meli marco como leído su correo");
+ }
+
 }

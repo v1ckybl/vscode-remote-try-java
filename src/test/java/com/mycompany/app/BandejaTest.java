@@ -59,7 +59,7 @@ public class BandejaTest {
     }
     
     @Test
-    public void testIsEliminado() {
+    public void testUsuarioEliminaEmail() {
 
       Contacto r1 = new Contacto("Carlos", "carlos@empresa.com");
       Contacto martu = new Contacto("Martu", "martu@empresa.com");
@@ -83,7 +83,7 @@ public class BandejaTest {
       //email clonado en la bandeja de martu
       Email emailDeMartu = martu.getBandejaEntrada().getEmails().get(0);
       
-      //verificar que el email llegó
+      //verificar que el email le llegó a martu
       assertEquals(1, martu.getBandejaEntrada().getEmails().size(),"Martu debería tener un correo en su bandeja de entrada");
       assertTrue(martu.getBandejaEntrada().getEmails().contains(emailDeMartu));
       

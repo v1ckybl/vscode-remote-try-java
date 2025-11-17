@@ -26,6 +26,18 @@ public class Email implements IMarcador {
         this.eliminado = false; // por defecto no eliminado
     }
 
+    public Email(String subject2, String content2, Contacto sender2, List<Contacto> recipients2, boolean leido2,
+        boolean important2, boolean borrador2, boolean eliminado2) {
+      this.subject = subject2;
+      this.content = content2;
+      this.sender = sender2;
+      this.recipients = new ArrayList<>(recipients2);
+      this.leido = leido2;
+      this.important = important2;
+      this.borrador = borrador2;
+      this.eliminado = eliminado2;
+    }
+
     //uso básico
     public void restaurar() {
         this.eliminado = false;
