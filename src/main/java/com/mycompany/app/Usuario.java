@@ -48,6 +48,9 @@ public class Usuario {
     email.marcarComoNoLeido();
   }
   
+  public void marcarComoFavorito(Email email) {
+    email.marcarComoFavorito();
+    }
 
   // Usuario puede eliminar emails de su contacto asociado
   public void eliminarEmail(Email email) {
