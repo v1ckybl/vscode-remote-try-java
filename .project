@@ -22,7 +22,11 @@
 	</natures>
 	<filteredResources>
 		<filter>
+<<<<<<< HEAD
+			<id>1763480169642</id>
+=======
 			<id>1763252693597</id>
+>>>>>>> refs/remotes/origin/main
 			<name></name>
 			<type>30</type>
 			<matcher>
