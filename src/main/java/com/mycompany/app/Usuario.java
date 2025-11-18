@@ -6,7 +6,6 @@ public class Usuario {
   private String nombre;
   private String email;
   private Contacto contacto; // Relación Usuario -> Contacto
-  private boolean leido;
 
   public Usuario(String nombre, String email, Contacto contacto) {
       this.nombre = nombre;
