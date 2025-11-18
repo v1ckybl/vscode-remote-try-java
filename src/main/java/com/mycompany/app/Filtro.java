@@ -82,10 +82,10 @@ public class Filtro {
   }*/
 
 //filtro genérico por dominio
-    public List<Email> filtrarPorDominio(List<Email> emails, String dominio) {
-        return emails.stream()
-            .filter(email -> email.getSender().getEmail().endsWith("@" + dominio))
-            .toList();
+  public List<Email> filtrarPorDominio(List<Email> emails, String dominio) {
+    return emails.stream()
+        .filter(email -> email.getSender().getEmail().endsWith("@" + dominio))
+        .toList();
   }
 
   
