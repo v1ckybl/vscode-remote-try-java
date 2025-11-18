@@ -10,6 +10,28 @@ import org.junit.jupiter.api.Test;
 
 public class EmailTest {
 
+  //pruebaCI
+
+  @Test
+  public void testEnvioDeCorreo() {//raro este test
+
+    Contacto remitente = new Contacto("Remitente 1", "remitente@demo.com");
+    Contacto c1 = new Contacto("Contacto 1", "contacto1@demo.com");
+
+    Email email = new Email("Prueba", "Hola, este es un correo de prueba", remitente, Arrays.asList(c1));
+
+    //bandeja de entrada del destinatario
+    Bandeja bandejaEntrada = new Bandeja();
+
+    //simular que le llega un correo al destinatario
+    bandejaEntrada.agregarEmail(email);
+
+    assertEquals(1, bandejaEntrada.getEmails().size(), "La bandeja debería tener un correo recibido");
+    assertEquals("Prueba", bandejaEntrada.getEmails().get(0).getSubject());
+    assertFalse(bandejaEntrada.getEmails().get(0).isLeido(), "El correo recibido debería estar sin leer");
+    assertEquals(remitente, bandejaEntrada.getEmails().get(0).getSender());
+  }
+
   //NO SE TOCAAAA ESTE TEST
   @Test
   public void testLeerContenido() {
@@ -51,8 +73,8 @@ public class EmailTest {
     meli.getBandejaEntrada().getEmails().get(0).getContent();
     assertTrue(emailMeli.isLeido(), "Meli marco como leído su correo");
   }
-
-  @Test
+ 
+    @Test
   public void testCrearBorrador() {
     Contacto dualipa = new Contacto("Carlos", "dualipa@empresa.com");
     Usuario dualipaUser = new Usuario("Carlos User", "dualipa@empresa.com", dualipa);
@@ -91,20 +113,20 @@ public class EmailTest {
     //ahora enviamos el borrador
     dualipaUser.enviarBorrador(borrador, Arrays.asList(rodridepaul));
     assertFalse(borrador.isBorrador());
-
+    
     //borradores vaciooo
     assertEquals(0, dualipa.getBandejaBorradores().getEmails().size());
-
+    
     //email llegó al destinatario (rodridepaul)
     assertEquals(1, rodridepaul.getBandejaEntrada().getEmails().size());
-
+    
     //copia recibida por rodridepaul contiene el contenido editado
     Email emailRecibido = rodridepaul.getBandejaEntrada().getEmails().get(0);
     assertNotSame(borrador, emailRecibido);
     assertEquals("El viernes no, mejor el martes.", emailRecibido.getContent());
   }
 
-@Test
+  @Test
 public void testMarcarComoLeidoYNoLeidoConCCO() {
     Contacto aylen = new Contacto("Aylen", "aylen@empresa.com");
     Contacto piccolini = new Contacto("Pato Pico", "pato@empresa.com");
@@ -118,15 +140,13 @@ public void testMarcarComoLeidoYNoLeidoConCCO() {
                             "Mañana a las 10am", 
                             aylen, 
                             Arrays.asList(fercho, piccolini));
-    
-    //destinatario CCO 
-    email.getCcRecipients().add(jaqui); 
+                            //destinatario CCO 
+                            email.getCcRecipients().add(jaqui); 
     
     SendMail gestor = new SendMail();
-    // NOTA: La lista de recipients SÓLO debe incluir TO/PARA. El CCO lo maneja el email.
+    // la lista de recipients SÓLO debe incluir TO/PARA. El CCO lo maneja el email.
     gestor.enviar(email, java.util.Arrays.asList(fercho, piccolini));
     
-    // 1. VERIFICACIONES DE LLEGADA (Igual que antes)
     assertEquals(1, piccolini.getBandejaEntrada().getEmails().size(), "Pato recibió el correo TO.");
     assertEquals(1, fercho.getBandejaEntrada().getEmails().size(), "Fercho recibió el correo TO.");
     assertEquals(1, jaqui.getBandejaEntrada().getEmails().size(), "Jaqui recibió el correo CCO."); 
@@ -140,9 +160,9 @@ public void testMarcarComoLeidoYNoLeidoConCCO() {
     // Ambos no deben tener la lista CCO adjunta
     assertTrue(emailPato.getCcRecipients().isEmpty(), "La lista CCO de Pato debe estar vacía.");
     assertTrue(emailJaqui.getCcRecipients().isEmpty(), "La lista CCO de Jaqui debe estar vacía.");
-  }
 }
 
+}
 
 
 
