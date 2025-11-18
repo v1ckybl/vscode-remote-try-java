@@ -8,12 +8,13 @@ public class Contacto {
     private String email;
     private Bandeja bandejaEntrada; 
     private Bandeja bandejaSalida;
-
+    private Bandeja bandejaBorradores; 
     //esas bandejas para que cada Contacto tenga su propio historial.
 
     public Contacto() {
         this.bandejaEntrada = new Bandeja();
         this.bandejaSalida = new Bandeja();
+        this.bandejaBorradores = new Bandeja();
     }
 
     public Contacto(String nombre, String email) { //agregar this bandeja de entrada para que cada contacto tenga su propia bandeja
@@ -21,6 +22,7 @@ public class Contacto {
         this.email = email;
         this.bandejaEntrada = new Bandeja();
         this.bandejaSalida = new Bandeja();
+        this.bandejaBorradores = new Bandeja();
     }
 
     public String getNombre() {
@@ -44,9 +46,13 @@ public class Contacto {
     }
 
     public Bandeja getBandejaSalida() {
-        return bandejaSalida;
+      return bandejaSalida;
     }
-    
+
+    public Bandeja getBandejaBorradores() {
+      return bandejaBorradores;
+    }
+
     @Override
     public String toString() {
         return nombre + " <" + email + ">";
@@ -54,10 +60,11 @@ public class Contacto {
 
     //metodo eliminar contacto, vacia la info de todo
     public void eliminarContacto() {
-    this.nombre = null;
-    this.email = null;
-    this.bandejaEntrada = null;
-    this.bandejaSalida = null;
+      this.nombre = null;
+      this.email = null;
+      this.bandejaEntrada = null;
+      this.bandejaSalida = null;
+      this.bandejaBorradores = null;
     }
 
 }

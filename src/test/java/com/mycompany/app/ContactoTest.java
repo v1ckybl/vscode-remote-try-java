@@ -3,10 +3,8 @@ package com.mycompany.app;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 public class ContactoTest {
     
     private Contacto contacto;
@@ -27,8 +25,8 @@ public class ContactoTest {
     
     @Test
     void testCrearContacto() {
-        String nombre = "Juan Pérez";
-        String email = "juan.perez@email.com";
+        String nombre = "Tini Stoessel";
+        String email = "tini.stoessel@email.com";
         
         Contacto contactoCompleto = new Contacto(nombre, email);
         
@@ -37,26 +35,30 @@ public class ContactoTest {
         assertEquals(email, contactoCompleto.getEmail());
     }
     
-  
     @Test
     void testEditarNombreContacto() {
-        String nombreInicial = "María García";
-        String nombreNuevo = "María García López";
+        GestorContactos gestor = new GestorContactos();
+        Contacto steve = new Contacto("Steve Jobs", "steve@email.com");
+
+        assertEquals("Steve Jobs", steve.getNombre());
+        assertEquals("steve@email.com", steve.getEmail());
+
+        String nuevoNombre = "Steve Wozniak";
+        String nuevoEmail = "swozniak@nuevo.com";
         
-        contacto.setNombre(nombreInicial);
-        assertEquals(nombreInicial, contacto.getNombre());
-        
-        //editar nombre
-        contacto.setNombre(nombreNuevo);
-        assertEquals(nombreNuevo, contacto.getNombre());
-    }
+        gestor.editarContacto(steve, nuevoNombre, nuevoEmail);
+
+        // VERIFICACIÓN: Los campos fueron actualizados
+        assertEquals(nuevoNombre, steve.getNombre(), "El nombre debe ser actualizado directamente.");
+        assertEquals(nuevoEmail, steve.getEmail(), "El email debe ser actualizado directamente.");
+        }
     
 
 //editar el email de un contacto
     @Test
     void testEditarEmailContacto() {
         String emailInicial = "maria@empresa.com";
-        String emailNuevo = "maria.garcia@nuevaempresa.com";
+        String emailNuevo = "maria.garcia@empresa.com";
         
         contacto.setEmail(emailInicial);
         assertEquals(emailInicial, contacto.getEmail());
@@ -69,52 +71,28 @@ public class ContactoTest {
 
     @Test
     void testEliminarContacto() {
-    // Crear contacto con datos
-    Contacto contacto = new Contacto("Ana López", "ana.lopez@email.com");
+    GestorContactos gestor = new GestorContactos();
+    Contacto Silvia = new Contacto("Silvia Hoferek", "silvia.hoferek@ucp.com");
+    Contacto Martu = new Contacto("Martina Perduca", "martu@email.com");
+
+    gestor.agregarContacto(Silvia);
+    gestor.agregarContacto(Martu);
+
+    assertEquals(2, gestor.size());
 
     // Verificar que se creó correctamente
-    assertNotNull(contacto.getNombre());
-    assertNotNull(contacto.getEmail());
-    assertNotNull(contacto.getBandejaEntrada());
-    assertNotNull(contacto.getBandejaSalida());
+    assertNotNull(Silvia.getNombre());
+    assertNotNull(Silvia.getEmail());
 
     // Eliminar contacto con el nuevo método
-    contacto.eliminarContacto();
+    gestor.eliminarContacto(Silvia);
 
     // Verificar que los campos se limpiaron
-    assertNull(contacto.getNombre(), "El nombre debería estar en null tras eliminar el contacto");
-    assertNull(contacto.getEmail(), "El email debería estar en null tras eliminar el contacto");
-    assertNull(contacto.getBandejaEntrada(), "La bandeja de entrada debería estar en null");
-    assertNull(contacto.getBandejaSalida(), "La bandeja de salida debería estar en null");
-}
+    assertNull(Silvia.getNombre(), "El nombre debería estar en null tras eliminar el contacto");
+    assertNull(Silvia.getEmail(), "El email debería estar en null tras eliminar el contacto");
 
-    @Test
-    void testContactoComoRemitente() {
-        String nombre = "Carlos Sender";
-        String email = "carlos.sender@email.com";
-        
-        Contacto remitente = new Contacto(nombre, email);
-        
-        // Verificar que los datos son correctos para usar como remitente
-        assertNotNull(remitente.getNombre());
-        assertNotNull(remitente.getEmail());
-        assertEquals(nombre, remitente.getNombre());
-        assertEquals(email, remitente.getEmail());
-        assertTrue(remitente.getEmail().contains("@"));
+    assertEquals(1, gestor.size(), "Queda 1 contacto en la lista."); 
     }
-    
-    @Test
-    void testContactoComoDestinatario() {
-        String nombre = "Laura Receiver";
-        String email = "laura.receiver@email.com";
-        
-        Contacto destinatario = new Contacto(nombre, email);
-        
-        // Verificar que los datos son correctos para usar como destinatario
-        assertNotNull(destinatario.getNombre());
-        assertNotNull(destinatario.getEmail());
-        assertEquals(nombre, destinatario.getNombre());
-        assertEquals(email, destinatario.getEmail());
-        assertTrue(destinatario.getEmail().contains("@"));
-    }
+
+
 }

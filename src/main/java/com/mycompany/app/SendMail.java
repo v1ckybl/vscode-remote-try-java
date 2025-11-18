@@ -16,16 +16,22 @@ public class SendMail implements ISend {
     //guarda el correo en la bandeja de salida del remitente
     remitente.getBandejaSalida().agregarEmail(email);
 
-    //guarda el correo en la bandeja de entrada de cada destinatario
-    // CADA DESTINATARIO RECIBE SU PROPIA COPIA DEL EMAIL
-    
+    //cada destinatario PARA recibe su propia copia del email   
     for (Contacto destinatario : recipients) {
-      
       Email copia = email.copiar();
-      
-        destinatario.getBandejaEntrada().agregarEmail(copia);
+      destinatario.getBandejaEntrada().agregarEmail(copia);
+      copia.getCcRecipients().clear();
+    } 
+    //destinatarios cc
+    for (Contacto destinatarioCC : email.getCcRecipients()) {
+      Email copiaCC = email.copiar();
+      destinatarioCC.getBandejaEntrada().agregarEmail(copiaCC);
+      //eliminar la lista CC de la copia enviada
+      copiaCC.getCcRecipients().clear();
     }
-
+    
     this.status = "Sent";
-    }
 }
+
+}
+

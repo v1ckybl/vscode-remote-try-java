@@ -9,55 +9,49 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 public class BandejaTest {
-     @Test
-    public void testBuscarEmailsEnBandejaDeEntrada() {
-      // Crear contactos
-      Contacto remitente = new Contacto("Carlos", "carlos@empresa.com");
-      Contacto ana = new Contacto("Ana", "ana@empresa.com");
-      Contacto luis = new Contacto("Luis", "luis@empresa.com");
-
-      // bandeja de entrada de Ana
-      Bandeja bandejaEntrada = ana.getBandejaEntrada();
-
-      // crear y agregar correos simulados
-      Email correo1 = new Email("Reunión semanal", "Recordatorio de reunión el lunes a las 10:00.", remitente);
-      correo1.getRecipients().add(ana);
-
-      Email correo2 = new Email("Informe mensual", "Por favor enviar el informe antes del viernes.", remitente);
-      correo2.getRecipients().add(ana);
-
-      Email correo3 = new Email("Festejo", "Luis invita a un asado el sábado.", luis);
-      correo3.getRecipients().add(ana);
-
-      bandejaEntrada.agregarEmail(correo1);
-      bandejaEntrada.agregarEmail(correo2);
-      bandejaEntrada.agregarEmail(correo3);
-
-      // aca probamos las busquedassss
-
-      // buscar por asunto
-      List<Email> resultadoAsunto = bandejaEntrada.buscarEmails("reunión");
-      assertEquals(1, resultadoAsunto.size(), "Debería encontrar 1 correo con 'reunión' en el asunto");
-      assertEquals("Reunión semanal", resultadoAsunto.get(0).getSubject());
-
-      // buscar por contenido
-      List<Email> resultadoContenido = bandejaEntrada.buscarEmails("informe");
-      assertEquals(1, resultadoAsunto.size(), "Debería encontrar 1 correo con 'reunión' en el asunto");
-      assertEquals("Informe mensual", resultadoContenido.get(0).getSubject());
-
-      // buscar por remitente
-      List<Email> resultadoRemitente = bandejaEntrada.buscarEmails("carlos@empresa.com");
-      assertEquals(2, resultadoRemitente.size(), "Debería encontrar 2 correos enviados por Carlos");
-
-      // buscar por destinatario
-      List<Email> resultadoDestinatario = bandejaEntrada.buscarEmails("ana@empresa.com");
-      assertEquals(3, resultadoDestinatario.size(), "Ana debería aparecer como destinataria en los 3 correos");
-
-      // buscar texto inexistente
-      List<Email> resultadoVacio = bandejaEntrada.buscarEmails("vacaciones");
-      assertTrue(resultadoVacio.isEmpty(), "No debería encontrar correos con el texto 'vacaciones'");
-    }
     
+  @Test
+  public void testBuscarEmailsEnBandejaDeEntrada() {
+  // Crear contactos
+  Contacto remitente = new Contacto("Carlos", "carlos@empresa.com");
+  Contacto ana = new Contacto("Ana", "ana@empresa.com");
+  Contacto luis = new Contacto("Luis", "luis@empresa.com");
+
+  // bandeja de entrada de Ana
+  Bandeja bandejaEntrada = ana.getBandejaEntrada();
+
+  // crear y agregar correos simulados
+  Email correo1 = new Email("Reunión semanal", "Recordatorio de reunión el lunes a las 10:00.", remitente, Arrays.asList(ana));
+  Email correo2 = new Email("Informe mensual", "Por favor enviar el informe antes del viernes.", remitente, Arrays.asList(ana));
+  Email correo3 = new Email("Festejo", "Luis invita a un asado el sábado.", luis, Arrays.asList(ana));
+
+  bandejaEntrada.agregarEmail(correo1);
+  bandejaEntrada.agregarEmail(correo2);
+  bandejaEntrada.agregarEmail(correo3);
+
+  // buscar por asunto
+  List<Email> resultadoAsunto = bandejaEntrada.buscarEmails(Filtro.porTextoLibre("reunión"));
+  assertEquals(1, resultadoAsunto.size(), "Debería encontrar 1 correo con 'reunión' en el asunto");
+  assertEquals("Reunión semanal", resultadoAsunto.get(0).getSubject());
+
+  // buscar por contenido
+  List<Email> resultadoContenido = bandejaEntrada.buscarEmails(Filtro.porTextoLibre("informe"));
+  assertEquals(1, resultadoContenido.size(), "Debería encontrar 1 correo con 'informe' en el contenido");
+  assertEquals("Informe mensual", resultadoContenido.get(0).getSubject());
+
+  // buscar por remitente
+  List<Email> resultadoRemitente = bandejaEntrada.buscarEmails(Filtro.porTextoLibre("carlos@empresa.com"));
+  assertEquals(2, resultadoRemitente.size(), "Debería encontrar 2 correos enviados por Carlos");
+
+  // buscar por destinatario
+  List<Email> resultadoDestinatario = bandejaEntrada.buscarEmails(Filtro.porTextoLibre("ana@empresa.com"));
+  assertEquals(3, resultadoDestinatario.size(), "Ana debería aparecer como destinataria en los 3 correos");
+
+  // buscar texto inexistente
+  List<Email> resultadoVacio = bandejaEntrada.buscarEmails(Filtro.porTextoLibre("vacaciones"));
+  assertTrue(resultadoVacio.isEmpty(), "No debería encontrar correos con el texto 'vacaciones'");
+  }
+
     @Test
     public void testUsuarioEliminaEmail() {
 
@@ -69,10 +63,7 @@ public class BandejaTest {
       Email emailVierne = new Email(
           "Ya es Viernes",
           "Hoy es viernes de cerveza.",
-          r1);
-
-      // Agregar destinatarios
-      emailVierne.getRecipients().add(martu);
+          r1, Arrays.asList(martu));
 
       //clase que envía
       SendMail gestor = new SendMail();
@@ -94,17 +85,17 @@ public class BandejaTest {
       //verificar que ya no está en la bandeja
       assertFalse(martu.getBandejaEntrada().getEmails().contains(emailDeMartu));
     }
-    
-    @Test
-    public void testFiltroEmailsUCP() {
+
+      @Test
+      public void testFiltroEmailsUCP() {
         // Crear emails de diferentes dominios
         Contacto laura = new Contacto("Laura", "laura@ucp.com");
         Contacto aylen = new Contacto("Aylen", "aylen@gmail.com");
         Contacto vick = new Contacto("Vick", "vick@ucp.com");
         
-        Email email1 = new Email("Test UCP 1", "Contenido", laura);
-        Email email2 = new Email("Test Gmail", "Contenido", aylen);
-        Email email3 = new Email("Test UCP 2", "Contenido", vick);
+        Email email1 = new Email("Test UCP 1", "Contenido", laura, Arrays.asList());
+        Email email2 = new Email("Test Gmail", "Contenido", aylen, Arrays.asList());
+        Email email3 = new Email("Test UCP 2", "Contenido", vick, Arrays.asList());
         
         List<Email> todosLosEmails = Arrays.asList(email1, email2, email3);
         
@@ -122,8 +113,8 @@ public class BandejaTest {
     @Test
     public void testNoLeidosEnInbox() {
     Contacto remitente = new Contacto("Carlos", "carlos@ucp.com");
-    Email e1 = new Email("Tema 1", "Sin leer", remitente);
-    Email e2 = new Email("Tema 2", "Ya leído", remitente);
+    Email e1 = new Email("Tema 1", "Sin leer", remitente, Arrays.asList());
+    Email e2 = new Email("Tema 2", "Ya leído", remitente, Arrays.asList());
     e2.marcarComoLeido();
 
     List<Email> emails = Arrays.asList(e1, e2);
@@ -135,12 +126,12 @@ public class BandejaTest {
     assertFalse(resultado.get(0).isLeido(), "El correo debería estar sin leer");
   }
 
-  @Test
-  public void testFiltrarConPredicado() {
+    @Test
+    public void testFiltrarConPredicado() {
     Contacto remitente = new Contacto("Laura", "laura@ucp.com");
 
-    Email e1 = new Email("Reunión urgente", "Recordatorio de reunión", remitente);
-    Email e2 = new Email("Comunicado", "Nada importante", remitente);
+    Email e1 = new Email("Reunión urgente", "Recordatorio de reunión", remitente, Arrays.asList());
+    Email e2 = new Email("Comunicado", "Nada importante", remitente, Arrays.asList());
 
     List<Email> emails = Arrays.asList(e1, e2);
 
@@ -154,4 +145,126 @@ public class BandejaTest {
   }
 //como q no entiendo mucho los filtros pero bueno aca hay dos test más
 
+  @Test
+  public void testFiltroDominioYTextoConCantantes() {
+    // crear contactos 
+    Contacto shakira = new Contacto("Shakira", "shakira@pop.com");
+    Contacto badbunny = new Contacto("Bad Bunny", "badbunny@trap.com");
+    Contacto taylor = new Contacto("Taylor Swift", "taylor@pop.com");
+
+    // crear correos 
+    Email correo1 = new Email("Nuevo hit", "Shakira lanza 'Chantaje'", shakira, List.of(taylor));
+    Email correo2 = new Email("Colaboración", "Bad Bunny propone cancion con Shakira", badbunny, List.of(shakira));
+    Email correo3 = new Email("Gira mundial", "Taylor anuncia tour con 87 fechas y 3 cambios de vestuario por show", taylor, List.of(shakira));
+    Email correo4 = new Email("Nuevo hit", "Bad Bunny lanza 'ojitos lindos'", badbunny, List.of(taylor));
+    Email correo5 = new Email("Receta de empanadas", "Shakira comparte su secreto para la masa perfecta", shakira, List.of(badbunny));
+
+    List<Email> todosLosCorreos = List.of(correo1, correo2, correo3, correo4, correo5);
+
+    // filtrar por dominio "pop.com" y texto "hit"
+    List<Email> resultado = new Filtro().filtroDominioYTexto(todosLosCorreos, "pop.com", "hit");
+
+    // verficarrrr
+    assertEquals(1, resultado.size(), "Debe encontrar solo 1 correo de pop.com con 'hit'");
+    assertEquals("Nuevo hit", resultado.get(0).getSubject());
+
+    // otro caso nmsss con "trap.com" y texto "conejo"
+    List<Email> resultado2 = new Filtro().filtroDominioYTexto(todosLosCorreos, "trap.com", "ojitos");
+    assertEquals(1, resultado2.size(), "Debe encontrar 1 correo de trap.com con 'ojitos'");
+    assertEquals("Nuevo hit", resultado2.get(0).getSubject());
+
+  }
+
+  @Test
+  public void testFiltroNoLeidosYParaConCantantes() {
+    Contacto daddy = new Contacto("Daddy Yankee", "daddy@reggaeton.com");
+    Contacto karol = new Contacto("Karol G", "karol@reggaeton.com");
+    Contacto jbalvin = new Contacto("J Balvin", "balvin@colombia.com");
+    Contacto rosalia = new Contacto("Rosalía", "rosalia@motomami.com");
+
+    Email correo1 = new Email("Gasolina remix", "Daddy quiere reversionar el clásico con Karol", daddy, List.of(karol));
+    Email correo2 = new Email("Motomami tour", "Rosalía invita a Karol a abrir su show", rosalia, List.of(karol)); 
+    Email correo3 = new Email("Colaboración", "J Balvin propone tema con Karol y Rosalía", jbalvin, List.of(karol, rosalia)); 
+    Email correo4 = new Email("Fiesta privada", "Daddy organiza fiesta con reggaetón clásico", daddy, List.of(rosalia));
+    
+    correo3.marcarComoLeido();
+
+    List<Email> todosLosCorreos = List.of(correo1, correo2, correo3, correo4);
+
+    List<Email> resultadoKarol = new Filtro().filtroNoLeidosYPara(todosLosCorreos, "karol@reggaeton.com");
+    assertEquals(2, resultadoKarol.size(), "Karol debería tener 2 correos no leídos (sin contar el de Balvin que ya leyó)");
+
+    List<Email> resultadoRosalia = new Filtro().filtroNoLeidosYPara(todosLosCorreos, "rosalia@motomami.com");
+    assertEquals(1, resultadoRosalia.size(), "Rosalía solo tiene 1 correo no leído, el de Daddy Yankee");
+  }
+
+  @Test
+  public void testMarcarComoFavorito() {
+    Contacto lali = new Contacto("Lali", "lali@pop.com");
+    Contacto tini = new Contacto("Tini", "tini@pop.com");
+
+    Bandeja bandejalali = lali.getBandejaEntrada();
+
+    Email correo1 = new Email("Nuevo single", "Tini lanza 'buenos aires'", tini, List.of(lali));
+    Email correo2 = new Email("Fiesta", "Invitación a fiesta", tini, List.of(lali));
+    Email correo3 = new Email("Gira", "Fechas confirmadas para el tour Futttura", tini, List.of(lali));
+
+    correo1.marcarComoFavorito();
+    correo3.marcarComoFavorito();
+
+    bandejalali.agregarEmail(correo1);
+    bandejalali.agregarEmail(correo2);
+    bandejalali.agregarEmail(correo3);
+
+    List<Email> favoritos = bandejalali.getFavoritos();
+    assertEquals(2, favoritos.size(), "Lali debería tener 2 correos favoritos");
+
+    List<Email> resultado = bandejalali.buscarFavoritos(Filtro.porTextoLibre("gira"));
+    assertEquals(1, resultado.size(), "Debería encontrar 1 favorito con 'gira'");
+    assertEquals("Gira", resultado.get(0).getSubject());
+  }
+
+  @Test
+  public void testFiltrarPorDominioTrap() {
+    Contacto lali = new Contacto("Lali", "lali@pop.com");
+    Contacto tini = new Contacto("Tini", "tini@trap.com");
+    Contacto maria = new Contacto("María Becerra", "maria@trap.com");
+    Contacto nicki = new Contacto("Nicki", "nicki@reggaeton.com");
+
+    Email correo1 = new Email("Nuevo tema", "Lali propone colaboración", lali, List.of(tini));
+    Email correo2 = new Email("Gira", "Fechas confirmadas", tini, List.of(lali));
+    Email correo3 = new Email("Remix", "María quiere sumar a Nicki", maria, List.of(nicki));
+    Email correo4 = new Email("Fiesta", "Nicki invita a todas", nicki, List.of(lali, tini));
+
+    List<Email> todos = List.of(correo1, correo2, correo3, correo4);
+
+    List<Email> resultado = new Filtro().filtrarPorDominio(todos, "trap.com");
+
+    assertEquals(2, resultado.size(), "Debería encontrar 2 correos enviados desde el dominio trap.com");
+    assertTrue(resultado.contains(correo2), "El correo de Tini debería estar incluido");
+    assertTrue(resultado.contains(correo3), "El correo de María debería estar incluido");
+  }
+
+  @Test
+  public void testFiltrarPorPalabraEnAsunto() {
+  Contacto lali = new Contacto("Lali", "lali@pop.com");
+  Contacto tini = new Contacto("Tini", "tini@trap.com");
+  Contacto maria = new Contacto("María Becerra", "maria@trap.com");
+  Contacto nicki = new Contacto("Nicki", "nicki@reggaeton.com");
+
+  Email correo1 = new Email("Nuevo tema", "Lali propone colaboración", lali, List.of(tini));
+  Email correo2 = new Email("Gira importante", "Fechas confirmadas", tini, List.of(lali));
+  Email correo3 = new Email("Remix explosivo", "María quiere sumar a Nicki", maria, List.of(nicki));
+  Email correo4 = new Email("Fiesta", "Nicki invita a todas", nicki, List.of(lali, tini));
+
+  List<Email> todos = List.of(correo1, correo2, correo3, correo4);
+
+  List<Email> resultado = new Filtro().filtrar(todos, Filtro.asuntoContiene("importante"));
+
+  assertEquals(1, resultado.size(), "Debería encontrar 1 correo con 'importante' en el asunto");
+  assertTrue(resultado.contains(correo2), "El correo con asunto 'Gira importante' debería estar incluido");
+  }
+
 }
+
+

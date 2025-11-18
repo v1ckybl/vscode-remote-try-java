@@ -14,29 +14,19 @@ public class GestorContactos {
         contactos.add(contacto);
     }
     
-    public boolean eliminarContacto(String email) {
-      return contactos.removeIf(contacto -> contacto.getEmail().equals(email));
+    public void eliminarContacto(Contacto contactoAEliminar) {
+      contactoAEliminar.eliminarContacto();
+      this.contactos.remove(contactoAEliminar); 
     }
     
-    public boolean editarContacto(String email, String nuevoNombre, String nuevoEmail) {
-        for (Contacto c : contactos) {
-            if (c.getEmail().equals(email)) {
-                if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
-                    c.setNombre(nuevoNombre);
-                }
-                if (nuevoEmail != null && !nuevoEmail.isEmpty()) {
-                    c.setEmail(nuevoEmail);
-                }
-                return true; // edición exitosa
-            }
-        }
-        return false; // no encontrado
+    public void editarContacto(Contacto contacto, String nuevoNombre, String nuevoEmail) {
+        contacto.setNombre(nuevoNombre);
+        contacto.setEmail(nuevoEmail);
     }
 
-  
-    public List<Contacto> getContactos() {
+    /*public List<Contacto> getContactos() {
         return contactos;
-    }
+    }*/
     
     public int size() {
         return contactos.size();
