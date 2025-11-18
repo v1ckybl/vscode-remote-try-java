@@ -1,26 +1,39 @@
 # Run continuous integration
 
+name: Java CI with Maven
+
 on:
   push:
-    branches:
-      - '*'
+    branches: ["main"]
   pull_request:
-    branches:
-      - '*'
+    branches: ["main"]
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Java
-        uses: actions/setup-java@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
-          check-latest: false
-          cache: 'maven'
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Verify Java version
+        run: java -version
+
+      - name: Verify Maven version
+        run: mvn -v
+
       - name: Build with Maven
-        run: 'mvn package'
-        shell: bash
+        run: mvn -X -B clean package --file pom.xml
+
+      - name: Clean and build with Maven
+        run: mvn -B clean verify --file pom.xml
